@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/asiosdk/common",
+                "C:/asiosdk/host",
+                "C:/asiosdk/host/pc"
+            ],
+            "compilerPath": "cl.exe",
+            "cppStandard": "c++20"
+        }
+    ],
+    "version": 4
+}
