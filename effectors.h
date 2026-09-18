@@ -85,17 +85,19 @@ struct Delay {
     static constexpr const int sampleRate = 48000;
     float g; // Feedback. g < 0.8
     float delayTime; // Delay time, s
+    float mix; // mix=0: only original, mix=1: only echo
     int D;
     std::vector<float> delayBuffer; // Circular buffer
     int bufferSize; // size of delayBuffer
     int writeIdx = 0;
 
 
-    Delay(float delayTime_, float g_, float maxDelayTime = 2.0f)
+    Delay(float g_, float delayTime_, float mix_, float maxDelayTime = 2.0f)
         // List of arguments, only in the generator
         // Order has to be same with the above
         : g(std::clamp(g_, 0.0f, 0.9f)),
           delayTime(delayTime_),
+          mix(std::clamp(mix_, 0.0f, 1.0f)),
           D(static_cast<int>(delayTime_*sampleRate)),
           delayBuffer(static_cast<size_t>(maxDelayTime*sampleRate) + 1, 0.0f),
           bufferSize(static_cast<int>(delayBuffer.size()))
@@ -112,7 +114,11 @@ struct Delay {
             float delayed = delayBuffer[readIdx];
             //delayBuffer[writeIdx] = signal[i]; // Without feedback
             delayBuffer[writeIdx] = signal[i] + g*delayed;
-            signal[i] = signal[i] + g*delayed;
+            signal[i] = (1.0f - mix)*signal[i] + mix*delayed;
+            /*
+            1 - mix: dry
+            mix: wet
+            */
 
             //writeIdx = (writeIdx + 1) % bufferSize;
             if (++writeIdx >= bufferSize) writeIdx = 0;  
@@ -120,7 +126,7 @@ struct Delay {
     }
 
     void nameprint() const {
-        std::cout << "  " << name << " (feedback=" << g << ", Delay time=" << delayTime << ")" << std::endl; 
+        std::cout << "  " << name << " (feedback=" << g << ", delay time=" << delayTime << ", mix=" << mix <<")" << std::endl; 
     }
 };
 

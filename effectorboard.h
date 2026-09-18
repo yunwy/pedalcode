@@ -19,5 +19,5 @@ SequentialBoard board = {
 */
 
 SequentialBoard board = {
-    Delay{0.5f, 0.5f}
+    Delay{0.8f, 0.4f, 0.15}
 };
