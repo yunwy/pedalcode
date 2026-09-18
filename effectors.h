@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #include <tuple> // tuple, apply
 #include <algorithm> // clamp
 #include <cmath>
