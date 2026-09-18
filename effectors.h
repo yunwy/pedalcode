@@ -3,6 +3,7 @@
 #include <tuple> // tuple, apply
 #include <algorithm> // clamp
 #include <cmath>
+#include <vector>
 
 
 struct Clean {
@@ -81,14 +82,45 @@ struct Bitcrusher {
 
 struct Delay {
     static constexpr const char* name = "Delay";
+    static constexpr const int sampleRate = 48000;
     float g; // Feedback. g < 0.8
-    int D; // Delay
+    float delayTime; // Delay time, s
+    int D;
+    std::vector<float> delayBuffer; // Circular buffer
+    int bufferSize; // size of delayBuffer
+    int writeIdx = 0;
+
+
+    Delay(float delayTime_, float g_, float maxDelayTime = 2.0f)
+        // List of arguments, only in the generator
+        // Order has to be same with the above
+        : g(std::clamp(g_, 0.0f, 0.9f)),
+          delayTime(delayTime_),
+          D(static_cast<int>(delayTime_*sampleRate)),
+          delayBuffer(static_cast<size_t>(maxDelayTime*sampleRate) + 1, 0.0f),
+          bufferSize(static_cast<int>(delayBuffer.size()))
+          {
+            D = std::clamp<int>(D, 0, bufferSize - 1);
+          }
 
     void process(float* signal, int n) {
+        for (int i = 0; i < n; i++) {
+            //int readIdx = (writeIdx - D + bufferSize) % bufferSize;
+            int readIdx = writeIdx - D;
+            if (readIdx < 0) readIdx += bufferSize;
+
+            float delayed = delayBuffer[readIdx];
+            //delayBuffer[writeIdx] = signal[i]; // Without feedback
+            delayBuffer[writeIdx] = signal[i] + g*delayed;
+            signal[i] = signal[i] + g*delayed;
+
+            //writeIdx = (writeIdx + 1) % bufferSize;
+            if (++writeIdx >= bufferSize) writeIdx = 0;  
+        }
     }
 
     void nameprint() const {
-        std::cout << "  " << name << " (feedback=" << g << ", Delay=" << D << ")" << std::endl; 
+        std::cout << "  " << name << " (feedback=" << g << ", Delay time=" << delayTime << ")" << std::endl; 
     }
 };
 

@@ -11,7 +11,13 @@ SequentialBoard board = {
 };
 */
 
+/*
 SequentialBoard board = {
     Overdrive{5},
     Bitcrusher{4, 12}
+};
+*/
+
+SequentialBoard board = {
+    Delay{0.5f, 0.5f}
 };

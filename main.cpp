@@ -15,7 +15,7 @@ ASIODriverInfo driverInfo;
 ASIOBufferInfo bufferInfos[3]; // input 1, output 2
 ASIOCallbacks callbacks;
 
-long bufferSize = 64;
+long bufferSize = 256;
 float temp[4096];
 
 
@@ -60,7 +60,7 @@ int main() {
     }
 
     if (!drivers.loadDriver(names[1])) {
-        std::cout << "loadDriver failed: " << names[0] << std::endl;
+        std::cout << "loadDriver failed: " << names[1] << std::endl;
         return -1;
     }
 

@@ -4,7 +4,8 @@
         {
             "label": "CMake",
             "type": "shell",
-            "command": "call \"C:\\Program Files (x86)\\Microsoft Visual Studio\\18\\BuildTools\\Common7\\Tools\\VsDevCmd.bat\" && cmake --build build",
+            //"command": "call \"C:\\Program Files (x86)\\Microsoft Visual Studio\\18\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat\" && cmake --build build",
+            "command": "call \"C:\\Program Files (x86)\\Microsoft Visual Studio\\18\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat\" && cmake --build build --config Release",
             "options": {
                 "shell": {
                     "executable": "cmd.exe",
@@ -20,7 +21,8 @@
         {
             "label": "Run",
             "type": "shell",
-            "command": "call \"${workspaceFolder}\\build\\Debug\\pedalcode.exe",
+            //"command": "call \"${workspaceFolder}\\build\\Debug\\pedalcode.exe", // Debug
+            "command": "call \"${workspaceFolder}\\build\\Release\\pedalcode.exe",
             "options": {
                 "shell": {
                     "executable": "cmd.exe",
