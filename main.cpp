@@ -2,7 +2,6 @@
 #include <algorithm>
 
 // For ASIO
-#include <windows.h>
 #include <asio.h>
 #include <asiosys.h>
 #include <asiodrivers.h>

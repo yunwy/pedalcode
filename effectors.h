@@ -131,6 +131,38 @@ struct Delay {
 };
 
 
+struct Tremolo{
+    static constexpr const char* name = "Tremolo";
+    static constexpr const int sampleRate = 48000;
+    static constexpr const float pi = 3.14159265f;
+    float rate;
+    float depth;
+    float phase = 0;
+    float phaseIncrement;
+    
+
+    Tremolo(float rate_, float depth_)
+        : rate(rate_),
+          depth(std::clamp(depth_, 0.0f, 1.0f)),
+          phaseIncrement(2*pi*rate_/sampleRate) {}
+
+
+    void process(float* signal, int n) {
+        for (int i = 0; i < n; i++){
+            float lfo = 1.0f - depth*(1.0f - std::sin(phase))*0.5f;
+            signal[i] *= lfo;
+            phase += phaseIncrement;
+            if (phase >= 2.0f*pi) phase -= 2.0f*pi; 
+        }
+    }
+
+
+    void nameprint() const {
+        std::cout << "  " << name << " (rate=" << rate << ", depth=" << depth << ")" << std::endl; 
+    }
+};
+
+
 template <typename... PEDAL>
 struct SequentialBoard {
     std::tuple<PEDAL...> pedals;
