@@ -2,6 +2,7 @@
 #include <algorithm>
 
 // For ASIO
+#include <windows.h>
 #include <asio.h>
 #include <asiosys.h>
 #include <asiodrivers.h>
@@ -96,7 +97,6 @@ int main() {
     /*
     Callback registration (bufferSwitch function)
     3: input 1, output 2
-    64: smaples
     */
 
     // Start
@@ -110,7 +110,6 @@ int main() {
 
     // Finish
     ASIOStop();
-    //Sleep(100);
     ASIODisposeBuffers();
     drivers.removeCurrentDriver();
     return 0;
